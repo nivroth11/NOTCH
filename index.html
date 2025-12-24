@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Notch | FNOL Client Setup</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        color-scheme: light;
+        --bg: #f6f7fb;
+        --panel: #ffffff;
+        --text: #0f172a;
+        --muted: #6b7280;
+        --primary: #2563eb;
+        --primary-strong: #1d4ed8;
+        --border: #e2e8f0;
+        --success: #16a34a;
+        --warning: #f59e0b;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Inter", system-ui, -apple-system, sans-serif;
+        color: var(--text);
+        background: var(--bg);
+      }
+
+      .app {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 32px 24px 80px;
+      }
+
+      header {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        margin-bottom: 32px;
+      }
+
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 12px;
+        border-radius: 999px;
+        background: rgba(37, 99, 235, 0.1);
+        color: var(--primary-strong);
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: 0.02em;
+        width: fit-content;
+      }
+
+      h1 {
+        font-size: 32px;
+        margin: 0;
+      }
+
+      p {
+        margin: 0;
+        color: var(--muted);
+        line-height: 1.6;
+      }
+
+      .status-bar {
+        margin-top: 16px;
+        display: grid;
+        gap: 16px;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      }
+
+      .status-card {
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .status-title {
+        font-size: 13px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--muted);
+      }
+
+      .status-value {
+        font-size: 20px;
+        font-weight: 600;
+      }
+
+      .step-grid {
+        display: grid;
+        gap: 24px;
+      }
+
+      .step-card {
+        background: var(--panel);
+        border-radius: 20px;
+        border: 1px solid var(--border);
+        padding: 24px;
+        display: grid;
+        gap: 20px;
+      }
+
+      .step-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        flex-wrap: wrap;
+      }
+
+      .step-title {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+
+      .step-number {
+        width: 40px;
+        height: 40px;
+        border-radius: 12px;
+        background: rgba(37, 99, 235, 0.12);
+        color: var(--primary-strong);
+        display: grid;
+        place-items: center;
+        font-weight: 700;
+      }
+
+      h2 {
+        margin: 0;
+        font-size: 22px;
+      }
+
+      .step-meta {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 10px;
+        border-radius: 999px;
+        background: rgba(15, 23, 42, 0.06);
+        color: var(--muted);
+        font-size: 12px;
+        font-weight: 600;
+      }
+
+      .step-sections {
+        display: grid;
+        gap: 16px;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      }
+
+      .section-card {
+        border-radius: 16px;
+        border: 1px solid var(--border);
+        padding: 16px;
+        background: #fbfcfe;
+        display: grid;
+        gap: 10px;
+      }
+
+      .section-title {
+        font-weight: 600;
+      }
+
+      ul {
+        margin: 0;
+        padding-left: 18px;
+        color: var(--muted);
+      }
+
+      li {
+        margin-bottom: 6px;
+      }
+
+      .pill-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .pill {
+        padding: 6px 10px;
+        border-radius: 999px;
+        background: rgba(22, 163, 74, 0.12);
+        color: var(--success);
+        font-size: 12px;
+        font-weight: 600;
+      }
+
+      .pill.warning {
+        background: rgba(245, 158, 11, 0.16);
+        color: var(--warning);
+      }
+
+      .footer {
+        margin-top: 48px;
+        padding: 24px;
+        border-radius: 20px;
+        border: 1px dashed var(--border);
+        display: grid;
+        gap: 10px;
+        background: rgba(255, 255, 255, 0.6);
+      }
+
+      @media (max-width: 720px) {
+        h1 {
+          font-size: 26px;
+        }
+
+        .step-card {
+          padding: 18px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script type="text/babel">
+      const steps = [
+        {
+          title: "New Client Setup Foundations",
+          meta: "Workspace + Core Inputs",
+          sections: [
+            {
+              title: "Create Client Workspace",
+              items: [
+                "Notch-hosted infra or DevOps-provisioned workspace",
+                "Secure environment baseline applied",
+              ],
+            },
+            {
+              title: "Define Customer Scope",
+              items: ["Customer type: Insurance", "Target flow: Auto FNOL"],
+            },
+            {
+              title: "Select Data Sources",
+              items: [
+                "Policy Administration System (PAS)",
+                "Claims system",
+                "Ticketing system",
+                "Billing & payments system",
+                "Documentation portal (Confluence)",
+                "Data warehouse (Snowflake)",
+              ],
+            },
+            {
+              title: "Select Base FNOL Configuration",
+              items: [
+                "Basic FNOL",
+                "FNOL + towing & rental",
+                "Custom add-ons",
+              ],
+            },
+            {
+              title: "Upload Operational Documentation",
+              items: [
+                "SOPs",
+                "FAQs",
+                "Regional policy documents",
+                "Regulatory guidance",
+              ],
+            },
+            {
+              title: "API Connectivity",
+              items: [
+                "Auth method & endpoints per system",
+                "OpenAPI / Postman / Swagger URL",
+                "Connect & Test with sample payloads",
+              ],
+            },
+          ],
+          tags: ["Connected", "Not connected (with reason)", "Dev handoff"]
+        },
+        {
+          title: "Data Discovery & Mapping Readiness",
+          meta: "Entity + Enum Validation",
+          sections: [
+            {
+              title: "Entity Detection",
+              items: [
+                "Policy, Vehicle, Coverage, Claim",
+                "Entities editable by IM",
+              ],
+            },
+            {
+              title: "Enum Normalization",
+              items: [
+                "Confidence levels",
+                "Payload examples per value",
+              ],
+            },
+            {
+              title: "Completeness Score",
+              items: [
+                "Missing entity mappings",
+                "Unidentified or conflicting enums",
+                "Required fields per FNOL step",
+              ],
+            },
+          ],
+          tags: ["Dev handoff if non-canonical model"]
+        },
+        {
+          title: "Rules Setup (AI-Assisted Interpretation)",
+          meta: "Extraction + Approval",
+          sections: [
+            {
+              title: "Source Selection",
+              items: [
+                "Documentation sources",
+                "Relevant data sources",
+                "Trigger Extract FNOL Rules",
+              ],
+            },
+            {
+              title: "Rule Output",
+              items: [
+                "Deterministic rules",
+                "Source references",
+                "Confidence levels",
+                "Ambiguity flags",
+              ],
+            },
+            {
+              title: "Review & Approval",
+              items: [
+                "Resolve gaps",
+                "Approve rules",
+                "Finalize interpretation",
+              ],
+            },
+          ],
+          tags: ["AI-assisted", "Reviewer sign-off"]
+        },
+        {
+          title: "Configuration Compilation",
+          meta: "Build MVP Artifact",
+          sections: [
+            {
+              title: "Compile FNOL Configuration",
+              items: [
+                "Rules",
+                "Escalation definitions",
+                "Flow configuration",
+                "Allowed actions",
+                "Legal context",
+                "Generated system prompts",
+              ],
+            },
+            {
+              title: "Review & Approve",
+              items: ["All elements reviewed before activation"],
+            },
+          ],
+          tags: ["JSON artifact", "Dev handoff if custom logic"]
+        },
+        {
+          title: "Validation & QA",
+          meta: "Shadow Mode",
+          sections: [
+            {
+              title: "Shadow Validation",
+              items: [
+                "Read data only",
+                "Execute logic with no external actions",
+                "Decision + recommendation outputs",
+              ],
+            },
+            {
+              title: "Historical Runs",
+              items: [
+                "Compare system vs actual outcomes",
+                "Aggregate accuracy %",
+                "Drill into discrepancies",
+              ],
+            },
+            {
+              title: "Mismatch Insights",
+              items: [
+                "Incorrect rule",
+                "Missing data",
+                "Edge case",
+                "Iterate and re-run validation",
+              ],
+            },
+          ],
+          tags: ["No actions executed", "Accuracy review"]
+        },
+        {
+          title: "Activation & Rollout Controls",
+          meta: "Go-Live Governance",
+          sections: [
+            {
+              title: "Rollout Rules",
+              items: [
+                "Specific customer labels or intents",
+                "Percentage of FNOL traffic",
+                "Manual agent-routed cases",
+              ],
+            },
+          ],
+          tags: ["Targeted rollout", "Controlled exposure"]
+        },
+      ];
+
+      function App() {
+        return (
+          <div className="app">
+            <header>
+              <span className="badge">Insurance Client Setup</span>
+              <h1>FNOL Implementation Flow</h1>
+              <p>
+                A step-by-step UI outline for onboarding a new insurance client and
+                configuring an Auto FNOL workflow. Each stage highlights the key
+                inputs, validation checks, and handoff triggers.
+              </p>
+              <div className="status-bar">
+                <div className="status-card">
+                  <div className="status-title">Client</div>
+                  <div className="status-value">New Insurance Carrier</div>
+                  <p>Workspace ready for provisioning.</p>
+                </div>
+                <div className="status-card">
+                  <div className="status-title">Flow Target</div>
+                  <div className="status-value">Auto FNOL</div>
+                  <p>Foundational template selected.</p>
+                </div>
+                <div className="status-card">
+                  <div className="status-title">Readiness</div>
+                  <div className="status-value">5 Stages Remaining</div>
+                  <p>Validation required before activation.</p>
+                </div>
+              </div>
+            </header>
+
+            <main className="step-grid">
+              {steps.map((step, index) => (
+                <section className="step-card" key={step.title}>
+                  <div className="step-header">
+                    <div className="step-title">
+                      <span className="step-number">{index + 1}</span>
+                      <div>
+                        <h2>{step.title}</h2>
+                        <p>{step.meta}</p>
+                      </div>
+                    </div>
+                    <span className="step-meta">Stage {index + 1}</span>
+                  </div>
+                  <div className="step-sections">
+                    {step.sections.map((section) => (
+                      <div className="section-card" key={section.title}>
+                        <div className="section-title">{section.title}</div>
+                        <ul>
+                          {section.items.map((item) => (
+                            <li key={item}>{item}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="pill-row">
+                    {step.tags.map((tag) => (
+                      <span
+                        className={`pill ${
+                          tag.toLowerCase().includes("handoff") ||
+                          tag.toLowerCase().includes("not connected")
+                            ? "warning"
+                            : ""
+                        }`}
+                        key={tag}
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </section>
+              ))}
+            </main>
+
+            <section className="footer">
+              <h2>Dev Handoff Triggers</h2>
+              <p>
+                Escalate to engineering only when integrations or configurations
+                fall outside the canonical FNOL model, require custom security
+                protocols, or demand new rule logic.
+              </p>
+            </section>
+          </div>
+        );
+      }
+
+      const root = ReactDOM.createRoot(document.getElementById("root"));
+      root.render(<App />);
+    </script>
+  </body>
+</html>
